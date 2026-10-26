@@ -1,0 +1,53 @@
+import { useState } from "react";
+import Formulario from "./components/Formulario";
+import Tarea from "./components/Tarea";
+import "./App.css";
+
+function App() {
+  const [tareas, setTareas] = useState([]);
+
+  const agregarTarea = (texto) => {
+    const nuevaTarea = {
+      id: Date.now(),
+      texto,
+      completada: false,
+    };
+
+    setTareas([...tareas, nuevaTarea]);
+  };
+
+  const eliminarTarea = (id) => {
+    setTareas(tareas.filter((tarea) => tarea.id !== id));
+  };
+
+  const completarTarea = (id) => {
+    setTareas(
+      tareas.map((tarea) =>
+        tarea.id === id
+          ? { ...tarea, completada: !tarea.completada }
+          : tarea
+      )
+    );
+  };
+
+  return (
+    <div className="container">
+      <h1>✅ Mis Tareas</h1>
+
+      <Formulario agregarTarea={agregarTarea} />
+
+      <div className="lista-tareas">
+        {tareas.map((tarea) => (
+          <Tarea
+            key={tarea.id}
+            tarea={tarea}
+            eliminarTarea={eliminarTarea}
+            completarTarea={completarTarea}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default App;
